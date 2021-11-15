@@ -1530,4 +1530,21 @@ const products = [
   },
 ];
 
+const uniques = (array) =>
+  array.filter((item, index) => array.indexOf(item) === index);
+
+const allColors = uniques(
+  products.map((product) => product.colors).flat()
+).sort();
+
+const allSizes = uniques(
+  products.map((product) => product.sizes).flat()
+).sort();
+
+const allAvailabilities = uniques(
+  products.map((product) => product.availability).flat()
+).sort();
+
 export default products;
+
+export { allColors, allSizes, allAvailabilities };
