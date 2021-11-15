@@ -6,25 +6,46 @@ const FilterDropdown = ({
   allItems,
   selectedItems,
   setSelectedItems,
-}) => (
-  <span className="filterDropdown">
-    <label>{label}</label>
-    <select
-      onChange={(event) => {
-        setSelectedItems([...selectedItems, event.target.value]);
-      }}
-    >
-      <option value="0">Please select</option>
-      {allItems
-        .filter((item) => !selectedItems.includes(item))
-        .map((item) => (
+  filteredProducts,
+  propertyName,
+}) => {
+  let itemsInDropdown;
+  // If there is at least one selected color,
+  if (selectedItems.length > 0) {
+    // we want to have all colors in the dropdown,
+    // except for the ones which are selected
+    itemsInDropdown = allItems.filter((item) => !selectedItems.includes(item));
+  }
+  // If there is no color selected
+  else {
+    // we want to have only the colors in the dropdown,
+    // where at least one of the filtered products
+    // is available in one of the selected colors
+    itemsInDropdown = allItems.filter((item) => {
+      return filteredProducts.some((product) =>
+        product[propertyName].some((property) => item === property)
+      );
+    });
+  }
+
+  return (
+    <span className="filterDropdown">
+      <label>{label}</label>
+      <select
+        onChange={(event) => {
+          setSelectedItems([...selectedItems, event.target.value]);
+        }}
+      >
+        <option value="0">Please select</option>
+        {itemsInDropdown.map((item) => (
           <option key={item} value={item}>
             {item}
           </option>
         ))}
-    </select>
-  </span>
-);
+      </select>
+    </span>
+  );
+};
 
 const SelectedFilters = ({ selectedItems, setSelectedItems }) => (
   <>
@@ -75,18 +96,24 @@ const App = () => {
         allItems={allColors}
         selectedItems={selectedColors}
         setSelectedItems={setSelectedColors}
+        filteredProducts={filteredProducts}
+        propertyName="colors"
       />
       <FilterDropdown
         label="Size"
         allItems={allSizes}
         selectedItems={selectedSizes}
         setSelectedItems={setSelectedSizes}
+        filteredProducts={filteredProducts}
+        propertyName="sizes"
       />
       <FilterDropdown
         label="Store"
         allItems={allAvailabilities}
         selectedItems={selectedAvailabilities}
         setSelectedItems={setSelectedAvailabilities}
+        filteredProducts={filteredProducts}
+        propertyName="availability"
       />
       <div>
         <SelectedFilters
