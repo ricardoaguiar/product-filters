@@ -7,7 +7,7 @@ const FilterDropdown = ({
   selectedItems,
   setSelectedItems,
 }) => (
-  <>
+  <span className="filterDropdown">
     <label>{label}</label>
     <select
       onChange={(event) => {
@@ -23,13 +23,13 @@ const FilterDropdown = ({
           </option>
         ))}
     </select>
-  </>
+  </span>
 );
 
 const SelectedFilters = ({ selectedItems, setSelectedItems }) => (
   <>
     {selectedItems.map((selectedItem) => (
-      <div key={selectedItem}>
+      <span key={selectedItem} className="selectedFilter">
         {selectedItem}
         <button
           onClick={() => {
@@ -40,7 +40,7 @@ const SelectedFilters = ({ selectedItems, setSelectedItems }) => (
         >
           X
         </button>
-      </div>
+      </span>
     ))}
   </>
 );
@@ -71,45 +71,49 @@ const App = () => {
   return (
     <div className="App">
       <FilterDropdown
-        title="Color"
+        label="Color"
         allItems={allColors}
         selectedItems={selectedColors}
         setSelectedItems={setSelectedColors}
       />
       <FilterDropdown
-        title="Size"
+        label="Size"
         allItems={allSizes}
         selectedItems={selectedSizes}
         setSelectedItems={setSelectedSizes}
       />
       <FilterDropdown
-        title="Store"
+        label="Store"
         allItems={allAvailabilities}
         selectedItems={selectedAvailabilities}
         setSelectedItems={setSelectedAvailabilities}
       />
-      <SelectedFilters
-        selectedItems={selectedColors}
-        setSelectedItems={setSelectedColors}
-      />
-      <SelectedFilters
-        selectedItems={selectedSizes}
-        setSelectedItems={setSelectedSizes}
-      />
-      <SelectedFilters
-        selectedItems={selectedAvailabilities}
-        setSelectedItems={setSelectedAvailabilities}
-      />
+      <div>
+        <SelectedFilters
+          selectedItems={selectedColors}
+          setSelectedItems={setSelectedColors}
+        />
+        <SelectedFilters
+          selectedItems={selectedSizes}
+          setSelectedItems={setSelectedSizes}
+        />
+        <SelectedFilters
+          selectedItems={selectedAvailabilities}
+          setSelectedItems={setSelectedAvailabilities}
+        />
+      </div>
       <main>
         <div>{filteredProducts.length} items</div>
-        {filteredProducts.map((product) => (
-          <div key={product.id}>
-            <h2>{product.name}</h2>
-            <p>Colors: {product.colors.join(", ")}</p>
-            <p>Sizes: {product.sizes.join(", ")}</p>
-            <p>Stores: {product.availability.join(", ")}</p>
-          </div>
-        ))}
+        <div className="productGrid">
+          {filteredProducts.map((product) => (
+            <div key={product.id}>
+              <h2>{product.name}</h2>
+              <p>Colors: {product.colors.join(", ")}</p>
+              <p>Sizes: {product.sizes.join(", ")}</p>
+              <p>Stores: {product.availability.join(", ")}</p>
+            </div>
+          ))}
+        </div>
       </main>
     </div>
   );
